@@ -1,8 +1,9 @@
 import QtQuick 6.5
 import QtQuick.Layouts 6.5
 import QtQuick.Controls 6.5 as Controls
-import org.kde.plasma.core 6 as PlasmaCore
-import org.kde.plasma.components 6 as PlasmaComponents
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.plasma.plasmoid 2.0
 
 PlasmoidItem {
@@ -16,17 +17,29 @@ PlasmoidItem {
     property bool isWilted: false
     property int daysIdle: 0
 
-    property string currentImageSource: plasmoid.file("assets", "plant_seed.png")
+    property string currentImageSource: packageUrl("assets/plant_seed.png")
     property string pendingImageSource: ""
 
-    PlasmaCore.DataSource {
+    function packageUrl(relativePath) {
+        return String(Qt.resolvedUrl("../" + relativePath))
+    }
+
+    function packageFilePath(relativePath) {
+        var url = packageUrl(relativePath)
+        if (url.startsWith("file://")) {
+            return decodeURIComponent(url.substring(7))
+        }
+        return url
+    }
+
+    Plasma5Support.DataSource {
         id: plantDataSource
         engine: "executable"
         connectedSources: []
 
         function refresh(shouldWater) {
-            var scriptPath = plasmoid.file("scripts", "plant_data.py")
-            var command = "python3 " + scriptPath
+            var scriptPath = packageFilePath("scripts/plant_data.py")
+            var command = "python3 \"" + scriptPath + "\""
             if (shouldWater) {
                 command += " --water"
             }
@@ -66,7 +79,7 @@ PlasmoidItem {
         daysIdle = payload.days_idle || 0
 
         var imageName = payload.image || ("assets/plant_" + stageName + ".png")
-        var assetPath = plasmoid.file("assets", imageName.replace("assets/", ""))
+        var assetPath = packageUrl(imageName)
 
         updateTooltip()
 
@@ -94,13 +107,14 @@ PlasmoidItem {
 
     Component.onCompleted: plantDataSource.refresh(false)
 
-    background: Rectangle {
+    Rectangle {
         id: backgroundRect
         anchors.fill: parent
         color: "#eaf5e1"
         radius: 16
         border.width: 1
         border.color: "#d1e7c8"
+        z: -1
     }
 
     Timer {
