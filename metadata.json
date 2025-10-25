@@ -1,4 +1,9 @@
 {
+  "KPackage": {
+    "Id": "org.kde.plasma.bloombuddy",
+    "Structure": "Plasma/Applet",
+    "FormatVersion": 1
+  },
   "KPlugin": {
     "Id": "org.kde.plasma.bloombuddy",
     "Name": "Bloom Buddy",
@@ -13,5 +18,6 @@
     ]
   },
   "X-Plasma-API": "declarativeappletscript",
-  "X-Plasma-MainScript": "ui/main.qml"
+  "X-Plasma-MainScript": "ui/main.qml",
+  "X-Plasma-API-Minimum-Version": "6.0"
 }
