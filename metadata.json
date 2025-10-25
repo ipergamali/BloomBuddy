@@ -1,0 +1,17 @@
+{
+  "KPlugin": {
+    "Id": "org.kde.plasma.bloombuddy",
+    "Name": "Bloom Buddy",
+    "Description": "A virtual plant that grows a little every day you use your computer.",
+    "Version": "1.0",
+    "Icon": "flower",
+    "License": "GPLv3",
+    "Authors": [
+      {
+        "Name": "Joanne Pergamali"
+      }
+    ]
+  },
+  "X-Plasma-API": "declarativeappletscript",
+  "X-Plasma-MainScript": "ui/main.qml"
+}
